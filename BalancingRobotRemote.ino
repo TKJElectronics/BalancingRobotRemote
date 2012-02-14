@@ -1,3 +1,11 @@
+/* 
+ * The code is released under the GNU General Public License.
+ * Developed by Kristian Lauszus
+ * This is the remote control code for my balancing robot: https://github.com/TKJElectronics/BalancingRobot
+ * It uses my PS3 Controller Bluetooth library for Arduino: https://github.com/TKJElectronics/USB_Host_Shield_2.0
+ * For details, see http://blog.tkjelectronics.dk
+ */
+
 #include <PS3BT.h>
 #include "steer.h"
 
