@@ -28,7 +28,7 @@ void loop()
   if(BT.PS3BTConnected) {
     if(BT.getButton(PS))
     {
-      steer(shutdown);
+      steer(stop);
       BT.disconnect();      
     }
     else if(BT.getButton(SELECT))
@@ -37,14 +37,14 @@ void loop()
       steer(resume);
 
     if(BT.getButton(UP)) {
-      targetAngle += 0.05;
+      targetAngle -= 0.05;
       Serial.print("T,");
       Serial.print(targetAngle);      
       Serial.print(";");      
       while(BT.getButton(UP)) // Wait for release
         Usb.Task();
     } else if(BT.getButton(DOWN)) {
-      targetAngle -= 0.05;
+      targetAngle += 0.05;
       Serial.print("T,");
       Serial.print(targetAngle);
       Serial.print(";");
