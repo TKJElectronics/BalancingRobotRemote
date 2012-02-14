@@ -88,6 +88,8 @@ void steer(steerDirection direction) {
     Serial.print("C;"); // Continue
 
   lastDirection = direction;
+  
+  delay(10);
 }
 
 
