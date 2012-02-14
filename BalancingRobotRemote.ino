@@ -69,23 +69,23 @@ void loop()
 
 void steer(steerDirection direction) {
   if(direction == forward && lastDirection != forward)
-    Serial.print("F");
+    Serial.print("F;");
   else if(direction == backward && lastDirection != backward)
-    Serial.print("B");
+    Serial.print("B;");
   else if(direction == left && lastDirection != left)
-    Serial.print("L");
+    Serial.print("L;");
   else if(direction == leftRotate && lastDirection != leftRotate)
-    Serial.print("LR");
+    Serial.print("LR;");
   else if(direction == right && lastDirection != right)
-    Serial.print("R");
+    Serial.print("R;");
   else if(direction == rightRotate && lastDirection != rightRotate)
-    Serial.print("RR");
+    Serial.print("RR;");
   else if(direction == stop && lastDirection != stop)
-    Serial.print("S");
+    Serial.print("S;");
   else if(direction == shutdown && lastDirection != shutdown)
-    Serial.print("A"); // Abort
+    Serial.print("A;"); // Abort
   else if(direction == resume && lastDirection != resume)
-    Serial.print("C"); // Continue
+    Serial.print("C;"); // Continue
 
   lastDirection = direction;
 }
