@@ -1,0 +1,5 @@
+The code is released under the GNU General Public License.
+
+This is the remote control code, I use it to control my balancing robot. See code at: http://mbed.org/users/Lauszus/programs/BalancingRobotPS3/m5diyg. The Arduino use the PS3 Controller Bluetooth Library for Arduino i created (https://github.com/TKJElectronics/USB_Host_Shield_2.0). It's pretty simple. It just sends the data via the serial port to the mbed, when then reacts to the commands.
+
+For more information visit my blog at http://blog.tkjelectronics.dk/ or send me an email at kristianl at tkjelectronics dot dk.
