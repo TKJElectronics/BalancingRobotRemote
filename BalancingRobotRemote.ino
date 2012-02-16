@@ -26,12 +26,10 @@ void loop()
   Usb.Task();
   
   if(BT.PS3BTConnected) {
-    if(BT.getButton(PS))
-    {
+    if(BT.getButton(PS)) {
       steer(stop);
-      BT.disconnect();      
-    }
-    else if(BT.getButton(SELECT))
+      BT.disconnect();
+    } else if(BT.getButton(SELECT))
       steer(shutdown);
     else if(BT.getButton(START))
       steer(resume);
@@ -53,22 +51,16 @@ void loop()
     }
 
     if(BT.getAnalogHat(LeftHatY) > 137) {
-      if(BT.getAnalogHat(RightHatY) > 137) {
-        if(BT.getAnalogHat(LeftHatY) > 205 && BT.getAnalogHat(RightHatY) > 205)
-          steer(backwardFull);
-        else
-          steer(backward);
-      } else if(BT.getAnalogHat(RightHatY) < 117)
+      if(BT.getAnalogHat(RightHatY) > 137) 
+        steer(backward);
+      else if(BT.getAnalogHat(RightHatY) < 117)
         steer(leftRotate);
       else
         steer(left);
     } else if(BT.getAnalogHat(LeftHatY) < 117) {
-      if(BT.getAnalogHat(RightHatY) < 117) {
-        if(BT.getAnalogHat(LeftHatY) < 50 && BT.getAnalogHat(RightHatY) < 50)
-          steer(forwardFull);
-        else
-          steer(forward);
-      } else if(BT.getAnalogHat(RightHatY) > 137)
+      if(BT.getAnalogHat(RightHatY) < 117)
+        steer(forward);
+      else if(BT.getAnalogHat(RightHatY) > 137)
         steer(rightRotate);
       else
         steer(right);   
@@ -82,15 +74,17 @@ void loop()
 }
 
 void steer(steerDirection direction) {
-  if(direction == forward && lastDirection != forward)
-    Serial.print("F;");
-  else if(direction == forwardFull && lastDirection != forwardFull)
-    Serial.print("FF;");
-  else if(direction == backward && lastDirection != backward)
-    Serial.print("B;");
-  else if(direction == backwardFull && lastDirection != backwardFull)
-    Serial.print("BF;");    
-  else if(direction == left && lastDirection != left)
+  if(direction == forward) { // It should keep sending the speed
+    double speed = (double)map(BT.getAnalogHat(LeftHatY),116,0,0,5)/2 + (double)map(BT.getAnalogHat(RightHatY),116,0,0,5)/2; // take the avarage
+    Serial.print("F,");
+    Serial.print(speed);
+    Serial.print(";");    
+  } else if(direction == backward) { // It should keep sending the speed
+    double speed = (double)map(BT.getAnalogHat(LeftHatY),138,255,0,5)/2 + (double)map(BT.getAnalogHat(RightHatY),138,255,0,5)/2; // take the avarage
+    Serial.print("B,");
+    Serial.print(speed);
+    Serial.print(";");
+  } else if(direction == left && lastDirection != left)
     Serial.print("L;");
   else if(direction == leftRotate && lastDirection != leftRotate)
     Serial.print("LR;");
