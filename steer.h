@@ -1,11 +1,11 @@
 enum steerDirection {
   forward,
   backward,
+  stop,
   left,
   leftRotate,
   right,
-  rightRotate,
-  stop, 
+  rightRotate, 
   shutdown,
   resume,
 };

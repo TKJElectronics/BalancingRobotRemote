@@ -3,7 +3,7 @@
  * Developed by Kristian Lauszus
  * This is the remote control code for my balancing robot: https://github.com/TKJElectronics/BalancingRobot
  * It uses my PS3 Controller Bluetooth library for Arduino: https://github.com/TKJElectronics/USB_Host_Shield_2.0
- * For details, see http://blog.tkjelectronics.dk
+ * For details, see http://blog.tkjelectronics.dk/2012/02/the-balancing-robot/
  */
 
 #include <PS3BT.h>
@@ -19,7 +19,8 @@ void setup()
 {
   Serial.begin(115200);  
   if (Usb.Init() == -1) 
-    while(1); //halt    
+    while(1); // halt
+  steer(stop); // Send stop command at startup
 }
 void loop()
 {
@@ -75,12 +76,12 @@ void loop()
 
 void steer(steerDirection direction) {
   if(direction == forward) { // It should keep sending the speed
-    double speed = (double)map(BT.getAnalogHat(LeftHatY),116,0,0,5)/2 + (double)map(BT.getAnalogHat(RightHatY),116,0,0,5)/2; // take the avarage
+    double speed = (double)(map(BT.getAnalogHat(LeftHatY),116,0,0,5) + map(BT.getAnalogHat(RightHatY),116,0,0,5))/2; // calculate the average
     Serial.print("F,");
     Serial.print(speed);
     Serial.print(";");    
   } else if(direction == backward) { // It should keep sending the speed
-    double speed = (double)map(BT.getAnalogHat(LeftHatY),138,255,0,5)/2 + (double)map(BT.getAnalogHat(RightHatY),138,255,0,5)/2; // take the avarage
+    double speed = (double)(map(BT.getAnalogHat(LeftHatY),138,255,0,5) + map(BT.getAnalogHat(RightHatY),138,255,0,5))/2; // calculate the average
     Serial.print("B,");
     Serial.print(speed);
     Serial.print(";");
@@ -103,5 +104,3 @@ void steer(steerDirection direction) {
   
   delay(10);
 }
-
-
