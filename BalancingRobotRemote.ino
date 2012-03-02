@@ -13,14 +13,13 @@ USB Usb;
 PS3BT BT(&Usb);
 
 double targetAngle = 90;
-int lastDirection = stop;
+int lastDirection;
 
 void setup()
 {
   Serial.begin(115200);  
   if (Usb.Init() == -1) 
     while(1); // halt
-  steer(stop); // Send stop command at startup
 }
 void loop()
 {
@@ -71,7 +70,8 @@ void loop()
         steer(left);   
     } else 
         steer(stop);    
-  }
+  } else
+    steer(stop);
 }
 
 void steer(steerDirection direction) {
