@@ -18,7 +18,7 @@ int lastDirection;
 void setup()
 {
   Serial.begin(115200);  
-  if (Usb.Init() == -1) 
+  if (Usb.Init() == -1)
     while(1); // halt
 }
 void loop()
@@ -76,12 +76,12 @@ void loop()
 
 void steer(steerDirection direction) {
   if(direction == forward) { // It should keep sending the speed
-    double speed = (double)(map(BT.getAnalogHat(LeftHatY),116,0,0,5) + map(BT.getAnalogHat(RightHatY),116,0,0,5))/2; // calculate the average
+    double speed = (double)(map(BT.getAnalogHat(LeftHatY),116,0,0,7) + map(BT.getAnalogHat(RightHatY),116,0,0,7))/2; // calculate the average
     Serial.print("F,");
     Serial.print(speed);
     Serial.print(";");    
   } else if(direction == backward) { // It should keep sending the speed
-    double speed = (double)(map(BT.getAnalogHat(LeftHatY),138,255,0,5) + map(BT.getAnalogHat(RightHatY),138,255,0,5))/2; // calculate the average
+    double speed = (double)(map(BT.getAnalogHat(LeftHatY),138,255,0,7) + map(BT.getAnalogHat(RightHatY),138,255,0,7))/2; // calculate the average
     Serial.print("B,");
     Serial.print(speed);
     Serial.print(";");
