@@ -24,7 +24,7 @@ void setup()
 void loop()
 {
   Usb.Task();
-  
+
   if(BT.PS3BTConnected) {
     if(BT.getButton(PS)) {
       steer(stop);
@@ -34,7 +34,7 @@ void loop()
     else if(BT.getButton(START))
       steer(resume);
 
-    if(BT.getButton(UP)) {
+    if(BT.getButton(UP)) { // It is only necessary to adjust the target angle if the encoders are not implemented
       targetAngle -= 0.05;
       Serial.print("T,");
       Serial.print(targetAngle);      
@@ -65,27 +65,84 @@ void loop()
       else
         steer(right);   
     } else if(BT.getAnalogHat(RightHatY) > 137)  {
-        steer(right);   
+      steer(right);   
     } else if(BT.getAnalogHat(RightHatY) < 117) {
-        steer(left);   
+      steer(left);   
     } else 
-        steer(stop);    
+      steer(stop);    
+  } else if(BT.PS3NavigationBTConnected) {
+    if(BT.getButton(PS)) {
+      steer(stop);
+      BT.disconnect();
+    } 
+
+    if(BT.getButton(UP)) { // It is only necessary to adjust the target angle if the encoders are not implemented
+      targetAngle -= 0.05;
+      Serial.print("T,");
+      Serial.print(targetAngle);      
+      Serial.print(";");      
+      while(BT.getButton(UP)) // Wait for release
+        Usb.Task();
+    } else if(BT.getButton(DOWN)) {
+      targetAngle += 0.05;
+      Serial.print("T,");
+      Serial.print(targetAngle);
+      Serial.print(";");
+      while(BT.getButton(DOWN)) // Wait for release
+        Usb.Task();
+    }
+
+    if(BT.getAnalogHat(LeftHatX) > 250)   
+      steer(rightRotate);
+    else if(BT.getAnalogHat(LeftHatX) > 200)   
+      steer(right);
+    else if(BT.getAnalogHat(LeftHatX) < 5)
+      steer(leftRotate);
+    else if(BT.getAnalogHat(LeftHatX) < 55)   
+      steer(left);      
+    else if(BT.getAnalogHat(LeftHatY) > 137)
+      steer(backward);
+    else if(BT.getAnalogHat(LeftHatY) < 117)
+      steer(forward);
+    else 
+      steer(stop);  
   } else
     steer(stop);
 }
 
 void steer(steerDirection direction) {
-  if(direction == forward) { // It should keep sending the speed
-    double speed = (double)(map(BT.getAnalogHat(LeftHatY),116,0,0,7) + map(BT.getAnalogHat(RightHatY),116,0,0,7))/2; // calculate the average
-    Serial.print("F,");
-    Serial.print(speed);
-    Serial.print(";");    
-  } else if(direction == backward) { // It should keep sending the speed
-    double speed = (double)(map(BT.getAnalogHat(LeftHatY),138,255,0,7) + map(BT.getAnalogHat(RightHatY),138,255,0,7))/2; // calculate the average
-    Serial.print("B,");
-    Serial.print(speed);
-    Serial.print(";");
-  } else if(direction == left && lastDirection != left)
+  if(BT.PS3BTConnected) {
+    if(direction == forward) { // It should keep sending the speed
+      double speed = (double)(map(BT.getAnalogHat(LeftHatY),116,0,0,7) + map(BT.getAnalogHat(RightHatY),116,0,0,7))/2; // calculate the average
+      Serial.print("F,");
+      Serial.print(speed);
+      Serial.print(";"); 
+      delay(10);      
+    } else if(direction == backward) { // It should keep sending the speed
+      double speed = (double)(map(BT.getAnalogHat(LeftHatY),138,255,0,7) + map(BT.getAnalogHat(RightHatY),138,255,0,7))/2; // calculate the average
+      Serial.print("B,");
+      Serial.print(speed);
+      Serial.print(";");
+      delay(10);  
+    } 
+  } 
+  else if(BT.PS3NavigationBTConnected) {
+    if(direction == forward) { // It should keep sending the speed
+      double speed = map(BT.getAnalogHat(LeftHatY),116,0,0,7);
+      Serial.print("F,");
+      Serial.print(speed);
+      Serial.print(";"); 
+      delay(10);
+    } else if(direction == backward) { // It should keep sending the speed
+      double speed = map(BT.getAnalogHat(LeftHatY),138,255,0,7);
+      Serial.print("B,");
+      Serial.print(speed);
+      Serial.print(";");
+      delay(10);
+    }
+  }
+
+  if(direction == left && lastDirection != left)
     Serial.print("L;");
   else if(direction == leftRotate && lastDirection != leftRotate)
     Serial.print("LR;");
@@ -101,6 +158,4 @@ void steer(steerDirection direction) {
     Serial.print("C;"); // Continue
 
   lastDirection = direction;
-  
-  delay(10);
 }
