@@ -10,7 +10,7 @@
 #include "steer.h"
 
 USB Usb;
-PS3BT BT(&Usb);
+PS3BT BT(&Usb,0x00,0x15,0x83,0x3D,0x0A,0x57);
 
 double targetAngle = 90;
 int lastDirection;
